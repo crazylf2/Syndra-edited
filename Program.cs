@@ -438,7 +438,7 @@ namespace Syndra
             }
 
             //QE
-            if (wTarget == null && qeTarget != null && Q.IsReady() && E.IsReady() && useQE)
+            if (qeTarget != null && Q.IsReady() && E.IsReady() && useQE)
                 UseQE(qeTarget);
 
             //WE
