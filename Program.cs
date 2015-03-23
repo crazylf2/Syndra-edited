@@ -1,4 +1,4 @@
-﻿    #region
+    #region
 
 using System;
 using System.Collections.Generic;
@@ -337,7 +337,9 @@ namespace Syndra
 
             //Q
             if (qTarget != null && useQ)
-                Q.Cast(qTarget, false, true);
+                Q.CastIfHitchanceEquals(qTarget, HitChance.High);
+                //Q.CastIfHitchanceEquals(qTarget, HitChance.Dashing);
+                //Q.Cast(qTarget,false,true);
 
             //E
             if (Utils.TickCount - W.LastCastAttemptT > Game.Ping + 150 && E.IsReady() && useE)
@@ -366,7 +368,8 @@ namespace Syndra
                     if (OrbManager.WObject(false) != null)
                     {
                         W.From = OrbManager.WObject(false).ServerPosition;
-                        W.Cast(wTarget, false, true);
+                        W.CastIfHitchanceEquals(wTarget, HitChance.High);
+                        W.CastIfHitchanceEquals(wTarget, HitChance.Dashing);
                     }
                 }
 
@@ -395,7 +398,8 @@ namespace Syndra
             {
                 if (R.IsReady())
                 {
-                    Q.Cast(qTarget, false, true);
+                    Q.CastIfHitchanceEquals(qTarget, HitChance.VeryHigh);
+                    Q.CastIfHitchanceEquals(qTarget, HitChance.Dashing);
                     R.Cast(rTarget);
                     Player.Spellbook.CastSpell(IgniteSlot, rTarget);
                     foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
@@ -420,7 +424,8 @@ namespace Syndra
                         if (OrbManager.WObject(false) != null)
                         {
                             W.From = OrbManager.WObject(false).ServerPosition;
-                            W.Cast(wTarget, false, true);
+                            W.CastIfHitchanceEquals(wTarget, HitChance.VeryHigh);
+                            W.CastIfHitchanceEquals(wTarget, HitChance.Dashing);
                         }
                     }
 
