@@ -270,9 +270,10 @@ namespace Syndra
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            var qeTarget = TargetSelector.GetTarget(EQ.Range, TargetSelector.DamageType.Magical);
-
-            UseQE(qeTarget);
+            if (!E.IsReady() || !gapcloser.Sender.IsValidTarget(E.Range))
+                return;
+            E.Cast(gapcloser.Sender, true);
+            W.LastCastAttemptT = Environment.TickCount + 500;
 
         }
 
