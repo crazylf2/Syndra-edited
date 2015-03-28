@@ -1,4 +1,4 @@
-    #region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -57,7 +57,7 @@ namespace Syndra
 
             IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
-//            DFG = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
+            //            DFG = Utility.Map.GetMap().Type == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
 
             Q.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
@@ -82,7 +82,7 @@ namespace Syndra
 
             //Load the orbwalker and add it to the menu as submenu.
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
-            
+
             //Combo menu:
             Config.AddSubMenu(new Menu("Combo", "Combo"));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "Use Q").SetValue(true));
@@ -157,9 +157,9 @@ namespace Syndra
                 Config.SubMenu("Misc")
                     .SubMenu("DontUlt")
                     .AddItem(new MenuItem("DontUlt" + enemy.BaseSkinName, enemy.BaseSkinName).SetValue(false));
-            
+
             //Damage after combo:
-            var dmgAfterComboItem =  new MenuItem("DamageAfterCombo", "Draw damage after combo").SetValue(true);
+            var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Draw damage after combo").SetValue(true);
             Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
             Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
             dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
@@ -181,8 +181,11 @@ namespace Syndra
                 .AddItem(new MenuItem("QERange", "QE range").SetValue(new Circle(true, Color.FromArgb(100, 255, 0, 255))));
             Config.SubMenu("Drawings")
                 .AddItem(dmgAfterComboItem);
+            Config.SubMenu("Drawings")
+               .AddItem(new MenuItem("Draw_ComboDamage", "Draw Combo Damage").SetValue(true));
             Config.AddToMainMenu();
-
+            //DamageIndicator.DamageToUnit = GetComboDamage;
+            //DamageIndicator.Enabled = drawComboDamageMenu.GetValue<bool>();
             //Add the events we are going to use:
             Game.OnUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
@@ -269,7 +272,7 @@ namespace Syndra
         {
             var qeTarget = TargetSelector.GetTarget(EQ.Range, TargetSelector.DamageType.Magical);
 
-                UseQE(qeTarget);
+            UseQE(qeTarget);
 
         }
 
@@ -340,6 +343,7 @@ namespace Syndra
                 Q.CastIfHitchanceEquals(qTarget, HitChance.High);
                 //Q.CastIfHitchanceEquals(qTarget, HitChance.Dashing);
                 //Q.Cast(qTarget,false,true);
+                //Q.Cast(qTarget, packets());
 
             //E
             if (Utils.TickCount - W.LastCastAttemptT > Game.Ping + 150 && E.IsReady() && useE)
@@ -368,8 +372,9 @@ namespace Syndra
                     if (OrbManager.WObject(false) != null)
                     {
                         W.From = OrbManager.WObject(false).ServerPosition;
-                        W.CastIfHitchanceEquals(wTarget, HitChance.High);
-                        W.CastIfHitchanceEquals(wTarget, HitChance.Dashing);
+                        //W.CastIfHitchanceEquals(wTarget, HitChance.High);
+                        W.Cast(wTarget,false,true);
+                        //W.CastIfHitchanceEquals(wTarget, HitChance.Dashing);
                     }
                 }
 
@@ -398,8 +403,8 @@ namespace Syndra
             {
                 if (R.IsReady())
                 {
-                    Q.CastIfHitchanceEquals(qTarget, HitChance.VeryHigh);
-                    Q.CastIfHitchanceEquals(qTarget, HitChance.Dashing);
+                    Q.CastIfHitchanceEquals(qTarget, HitChance.High);
+                    //Q.CastIfHitchanceEquals(qTarget, HitChance.Dashing);
                     R.Cast(rTarget);
                     Player.Spellbook.CastSpell(IgniteSlot, rTarget);
                     foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
@@ -593,7 +598,7 @@ namespace Syndra
 
             //Update the R range
             R.Range = R.Level == 3 ? 750 : 675;
-           
+
             if (Config.Item("CastQE").GetValue<KeyBind>().Active && E.IsReady() && Q.IsReady())
                 foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>())
                     if (enemy.IsValidTarget(EQ.Range) && Game.CursorPos.Distance(enemy.ServerPosition) < 300)
