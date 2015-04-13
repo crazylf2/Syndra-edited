@@ -260,7 +260,7 @@ namespace Syndra
             EQ.From = Player.ServerPosition.To2D().Extend(enemy.ServerPosition.To2D(), Q.Range).To3D();
 
             var prediction = EQ.GetPrediction(enemy);
-            if (prediction.Hitchance >= HitChance.High)
+            if (prediction.Hitchance >= HitChance.VeryHigh)
             {
                 Q.Cast(Player.ServerPosition.To2D().Extend(prediction.CastPosition.To2D(), Q.Range - 100));
                 QEComboT = Utils.TickCount;
