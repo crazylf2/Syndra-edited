@@ -62,7 +62,7 @@ namespace Syndra
             Q.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, (float)(45 * 0.5), 2500f, false, SkillshotType.SkillshotCircle);
-            EQ.SetSkillshot(float.MaxValue, 70f, 2100f, false, SkillshotType.SkillshotLine);
+            EQ.SetSkillshot(0.9f, 70f, 2000f, false, SkillshotType.SkillshotLine);
 
             SpellList.Add(Q);
             SpellList.Add(W);
@@ -260,7 +260,7 @@ namespace Syndra
             EQ.From = Player.ServerPosition.To2D().Extend(enemy.ServerPosition.To2D(), Q.Range).To3D();
 
             var prediction = EQ.GetPrediction(enemy);
-            if (prediction.Hitchance >= HitChance.VeryHigh)
+            if (prediction.Hitchance >= HitChance.High)
             {
                 Q.Cast(Player.ServerPosition.To2D().Extend(prediction.CastPosition.To2D(), Q.Range - 100));
                 QEComboT = Utils.TickCount;
@@ -413,40 +413,34 @@ namespace Syndra
                         if (enemy.IsValidTarget(EQ.Range))
                             UseE(enemy);
                     }
-                    if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady() && qeTarget != null)
-                    {
+                    //if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady() && qeTarget != null)
+                   // {
                         //WObject
-                        var gObjectPos = GetGrabableObjectPos(wTarget == null);
+                        //var gObjectPos = GetGrabableObjectPos(wTarget == null);
 
-                        if (gObjectPos.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100 && Utils.TickCount - E.LastCastAttemptT > Game.Ping + 100)
-                        {
-                            W.Cast(gObjectPos);
-                            W.LastCastAttemptT = Utils.TickCount;
-                        }
-                    }
-                    else if (wTarget != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
-                             Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
-                    {
-                        if (OrbManager.WObject(false) != null)
-                        {
-                            W.From = OrbManager.WObject(false).ServerPosition;
-                            W.CastIfHitchanceEquals(wTarget, HitChance.VeryHigh);
-                            W.CastIfHitchanceEquals(wTarget, HitChance.Dashing);
-                        }
-                    }
+                       // if (gObjectPos.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100 && Utils.TickCount - E.LastCastAttemptT > Game.Ping + 100)
+                       // {
+                          //  W.Cast(gObjectPos);
+                          //  W.LastCastAttemptT = Utils.TickCount;
+                        //}
+                   // }
+                    //else if (wTarget != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
+                     //        Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
+                    //{
+                       // if (OrbManager.WObject(false) != null)
+                        //{
+                         //   W.From = OrbManager.WObject(false).ServerPosition;
+                         //   W.Cast(wTarget, false, true);
+                        //}
+                   // }
 
                 }
             }
 
             //Ignite
             if (rTarget != null && useIgnite && IgniteSlot != SpellSlot.Unknown &&
-                Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
-            {
-                if (igniteDamage > rTarget.Health)
-                {
-                    Player.Spellbook.CastSpell(IgniteSlot, rTarget);
-                }
-            }
+                Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && igniteDamage >= rTarget.Health)
+                Player.Spellbook.CastSpell(IgniteSlot, rTarget);
 
             //QE
             if (qeTarget != null && Q.IsReady() && E.IsReady() && useQE)
