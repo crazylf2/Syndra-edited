@@ -62,7 +62,7 @@ namespace Syndra
             Q.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, (float)(45 * 0.5), 2500f, false, SkillshotType.SkillshotCircle);
-            EQ.SetSkillshot(0.98f, 55f, 1202f, false, SkillshotType.SkillshotLine);
+            EQ.SetSkillshot(0.98f, 55f, 1900f, false, SkillshotType.SkillshotLine);
 
             SpellList.Add(Q);
             SpellList.Add(W);
@@ -260,7 +260,7 @@ namespace Syndra
             EQ.From = Player.ServerPosition.To2D().Extend(enemy.ServerPosition.To2D(), Q.Range).To3D();
 
             var prediction = EQ.GetPrediction(enemy);
-            if (prediction.Hitchance >= HitChance.VeryHigh)
+            if (prediction.Hitchance >= HitChance.High)
             {
                 Q.Cast(Player.ServerPosition.To2D().Extend(prediction.CastPosition.To2D(), Q.Range - 100));
                 QEComboT = Utils.TickCount;
