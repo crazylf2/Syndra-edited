@@ -361,7 +361,7 @@ namespace Syndra
                     //WObject
                     var gObjectPos = GetGrabableObjectPos(wTarget == null);
 
-                    if (gObjectPos.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100 && Utils.TickCount - E.LastCastAttemptT > Game.Ping + 100)
+                    if (gObjectPos.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300 && Utils.TickCount - E.LastCastAttemptT > Game.Ping + 100)
                     {
                         W.Cast(gObjectPos);
                         W.LastCastAttemptT = Utils.TickCount;
