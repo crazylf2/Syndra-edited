@@ -19,7 +19,7 @@ namespace Syndra
         {
             get
             {
-                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
                     return -1;
 
                 return _wobjectnetworkid;
