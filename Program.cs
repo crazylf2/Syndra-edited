@@ -356,7 +356,7 @@ namespace Syndra
 
             //W
             if (useW)
-                if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady() && qeTarget != null)
+                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW" && W.IsReady() && qeTarget != null)
                 {
                     //WObject
                     var gObjectPos = GetGrabableObjectPos(wTarget == null);
@@ -367,7 +367,7 @@ namespace Syndra
                         W.LastCastAttemptT = Utils.TickCount;
                     }
                 }
-                else if (wTarget != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
+                else if (wTarget != null && Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast" && W.IsReady() &&
                          Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
                 {
                     if (OrbManager.WObject(false) != null)
